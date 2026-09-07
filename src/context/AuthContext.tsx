@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import { useEffect, useState, type PropsWithChildren } from 'react';
 import { AuthStatus, type AuthStatus as AuthStatusType, type User } from './auth.types';
 import { AuthContext } from './auth.context';
 
@@ -45,12 +45,4 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuthContext = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuthContext must be used within an AuthProvider');
-  }
-  return context;
 };

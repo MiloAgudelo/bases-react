@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { reqResApi } from '../api/reqRes';
 import type { ReqResUserListResponse, User } from '../interfaces/reqres.interface';
 
@@ -17,40 +17,38 @@ const loadUsers = async (page: number = 1): Promise<User[]> => {
 export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const currentPageRef = useRef<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
-    loadUsers(currentPageRef.current).then((users) => {
-      setUsers(users);
-      setIsLoading(false);
-    });
-  }, []);
+    let isMounted = true;
 
-  const nextPage = async () => {
-    currentPageRef.current++;
+    loadUsers(currentPage).then((loadedUsers) => {
+      if (isMounted) {
+        setUsers(loadedUsers);
+        setIsLoading(false);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentPage]);
+
+  const nextPage = () => {
     setIsLoading(true);
-    const newUsers = await loadUsers(currentPageRef.current);
-    if (newUsers.length > 0) {
-      setUsers(newUsers);
-    } else {
-      currentPageRef.current--;
-    }
-    setIsLoading(false);
+    setCurrentPage((prev) => prev + 1);
   };
 
-  const prevPage = async () => {
-    if (currentPageRef.current <= 1) return;
-    currentPageRef.current--;
+  const prevPage = () => {
+    if (currentPage <= 1) return;
     setIsLoading(true);
-    const newUsers = await loadUsers(currentPageRef.current);
-    setUsers(newUsers);
-    setIsLoading(false);
+    setCurrentPage((prev) => prev - 1);
   };
 
   return {
     users,
     isLoading,
-    currentPage: currentPageRef.current,
+    currentPage,
     nextPage,
     prevPage,
   };
