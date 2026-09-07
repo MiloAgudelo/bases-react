@@ -1,18 +1,17 @@
 import { useState } from 'react';
 
-export const useCounter = (initialValue: number = 10) => {
-    const [count, setCount] = useState(initialValue);
+export const useCounter = () => {
+  const [count, setCount] = useState<number>(10);
 
-    const increaseBy = (value: number) => {
-        setCount(Math.max(value + count, 0));
-    };
+  const increaseBy = (value: number) => {
+    setCount(Math.max(value + count, 0));
+  };
 
-    return {
-        // Properties
-        count,
+  return {
+    // Properties
+    count,
 
-        // Actions
-        increaseBy,
-
-    };
+    // Actions
+    increaseBy,
+  };
 };
