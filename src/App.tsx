@@ -1,21 +1,24 @@
-import { AuthProvider } from './context/AuthContext'
-import { Counter } from './components/Counter'
-import { LoginPage } from './components/LoginPage'
-import { UsersPage } from './components/UsersPage'
-import { FormsPage } from './components/FormsPage'
+// import { BasicFunctions } from './typescript/BasicFunctions';
+// import { BasicTypes } from './typescript/BasicTypes';
+// import { ObjectLiterals } from './typescript/ObjectLiterals';
+// import { Counter } from './components/Counter';
+// import { LoginPage } from './components/LoginPage';
+// import { UsersPage } from './components/UsersPage';
+import { FormsPage } from './components/FormsPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="min-h-screen flex flex-col items-center py-10 px-4 gap-8">
-        <h1 className="text-3xl font-bold underline">React + TS</h1>
-        <Counter />
-        <LoginPage />
-        <UsersPage />
-        <FormsPage />
-      </div>
-    </AuthProvider>
-  )
+    <div className="flex flex-col justify-center items-center h-svh">
+      <h1 className="text-4xl mb-5">React + TS</h1>
+      {/* <BasicTypes /> */}
+      {/* <ObjectLiterals /> */}
+      {/* <BasicFunctions /> */}
+      {/* <Counter /> */}
+      {/* <LoginPage /> */}
+      {/* <UsersPage /> */}
+      <FormsPage />
+    </div>
+  );
 }
 
-export default App
+export default App;
