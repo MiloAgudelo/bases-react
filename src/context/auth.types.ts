@@ -10,3 +10,13 @@ export interface User {
   name: string;
   email: string;
 }
+
+export interface AuthState {
+  status: AuthStatus;
+  token?: string;
+  user?: User;
+  isChecking: boolean;
+  isAuthenticated: boolean;
+  loginWithEmailPassword: (email: string) => void;
+  logout: () => void;
+}

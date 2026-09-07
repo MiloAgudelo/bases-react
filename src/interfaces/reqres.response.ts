@@ -1,4 +1,4 @@
-export interface ReqResUserListResponse {
+export interface UserListResponse {
   page: number;
   per_page: number;
   total: number;

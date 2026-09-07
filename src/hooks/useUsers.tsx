@@ -1,54 +1,41 @@
-import { useEffect, useState } from 'react';
-import { reqResApi } from '../api/reqRes';
-import type { ReqResUserListResponse, User } from '../interfaces/reqres.interface';
+import { useEffect, useRef, useState } from 'react';
+import type { User } from '../interfaces/reqres.response';
+import { loadUsersAction } from '../actions/load-users.action';
 
-const loadUsers = async (page: number = 1): Promise<User[]> => {
-  try {
-    const { data } = await reqResApi.get<ReqResUserListResponse>('/users', {
-      params: { page },
-    });
-    return data.data;
-  } catch (error) {
-    console.error('Error loading users:', error);
-    return [];
-  }
-};
-
+// Este hook encapsula la lógica para cargar usuarios y navegar páginas.
 export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const currentPageRef = useRef(1);
 
+  // Al cargar el componente, pedimos la primera página de usuarios.
   useEffect(() => {
-    let isMounted = true;
+    loadUsersAction(1).then(setUsers);
+  }, []);
 
-    loadUsers(currentPage).then((loadedUsers) => {
-      if (isMounted) {
-        setUsers(loadedUsers);
-        setIsLoading(false);
-      }
-    });
+  // Avanza a la página siguiente si existe información.
+  const nextPage = async () => {
+    currentPageRef.current++;
+    const users = await loadUsersAction(currentPageRef.current);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [currentPage]);
-
-  const nextPage = () => {
-    setIsLoading(true);
-    setCurrentPage((prev) => prev + 1);
+    if (users.length > 0) {
+      setUsers(users);
+    } else {
+      currentPageRef.current--;
+    }
   };
 
-  const prevPage = () => {
-    if (currentPage <= 1) return;
-    setIsLoading(true);
-    setCurrentPage((prev) => prev - 1);
+  // Vuelve a la página anterior.
+  const prevPage = async () => {
+    if (currentPageRef.current <= 1) return;
+
+    currentPageRef.current--;
+
+    const users = await loadUsersAction(currentPageRef.current);
+    setUsers(users);
   };
 
   return {
     users,
-    isLoading,
-    currentPage,
     nextPage,
     prevPage,
   };

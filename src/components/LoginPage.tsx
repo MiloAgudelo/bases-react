@@ -1,43 +1,41 @@
 import { useAuthContext } from '../context/useAuthContext';
 
 export const LoginPage = () => {
-  const { isChecking, isAuthenticated, user, loginWithEmailPassword, logout } = useAuthContext();
+  // Extraemos del contexto lo que necesitamos para controlar el login.
+  const { isChecking, isAuthenticated, loginWithEmailPassword, user, logout } =
+    useAuthContext();
 
+  // Mientras se valida el usuario, mostramos un mensaje temporal.
   if (isChecking) {
-    return (
-      <div className="flex flex-col items-center">
-        <h3 className="text-xl font-medium text-amber-600">Validando sesión...</h3>
-      </div>
-    );
+    return <h1>Verificando usuario</h1>;
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <h3 className="text-2xl font-bold">
-        {isAuthenticated ? 'Autenticado' : 'No autenticado'}
-      </h3>
-
+    <>
       {isAuthenticated ? (
-        <div className="flex flex-col items-center gap-2">
-          <div className="bg-slate-100 p-3 rounded-lg text-sm text-slate-800">
-            <p><strong>Nombre:</strong> {user?.name}</p>
-            <p><strong>Email:</strong> {user?.email}</p>
-          </div>
+        <>
+          <h3>Bienvenido</h3>
+          <pre>{JSON.stringify(user, null, 2)}</pre>
+
           <button
-            onClick={logout}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors"
+            onClick={() => logout()}
+            className="bg-blue-500 p-2 text-white rounded-xl mt-2"
           >
             Salir
           </button>
-        </div>
+        </>
       ) : (
-        <button
-          onClick={() => loginWithEmailPassword('fernando@google.com')}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
-        >
-          Ingresar
-        </button>
+        <>
+          <h3>Ingresar a la aplicación</h3>
+
+          <button
+            onClick={() => loginWithEmailPassword('susana@google.com')}
+            className="bg-blue-500 p-2 text-white rounded-xl mt-2"
+          >
+            Ingresar
+          </button>
+        </>
       )}
-    </div>
+    </>
   );
 };

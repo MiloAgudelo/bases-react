@@ -7,16 +7,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       setStatus(AuthStatus.unauthenticated);
     }, 1500);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const loginWithEmailPassword = (email: string) => {
     setUser({
-      name: 'Fernando Herrera',
+      name: 'susana',
       email: email,
     });
     setStatus(AuthStatus.authenticated);
@@ -27,7 +25,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setStatus(AuthStatus.unauthenticated);
   };
 
-  return (
+  return ( // los hijos de este provider van a tener acceso a todo lo que se pasa en el value
     <AuthContext.Provider
       value={{
         status: status,
